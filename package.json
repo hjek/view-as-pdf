@@ -3,9 +3,6 @@
     "version": "0.0.1",
     "license": "AGPL-3.0",
     "description": "Convert online documents to pdf",
-    "config": {
-	"port": "8080"
-    },
     "dependencies": {
 	"puppeteer": "latest"
     },

@@ -1,0 +1,11 @@
+{
+    "hosts": [
+	"example.com",
+	"docs.google.com",
+	"cryptpad.fr",
+	"cryptpad.organise.earth",
+	"xrdk.org"
+    ],
+    "port": "8080",
+    "timeout": "30000"
+}

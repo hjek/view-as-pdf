@@ -5,16 +5,14 @@
 const puppeteer = require('puppeteer')
 const http = require('http')
 const url = require('url')
+const fs = require('fs')
 
-// list of allowed hosts
-const allowedHosts = [
-    'example.com',
-    'docs.google.com',
-    'cryptpad.organise.earth',
-    'cryptpad.fr'
-]
+// load configuration
+const config = JSON.parse(fs.readFileSync('config.json'))
+const port = config.port || 8080
+const hosts = config.hosts || ["docs.google.com"]
+const timeout = Number(config.timeout) || 30000
 
-const port = process.env.npm_package_config_port || "8080"
 const form =
 `<!DOCTYPE html>
 <html>
@@ -32,7 +30,7 @@ const form =
 const urlToPdf = async (my_url) => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
-//    page.setDefaultTimeout(600*1000) // 10 minutes timeout for testing
+    config.timeout || page.setDefaultTimeout(config.timeout)
     await page.goto(my_url)
     await isLoaded(my_url, page)
     const buffer = await page.pdf({format: 'A4', waitUntil: 'networkidle2'})
@@ -61,7 +59,7 @@ const isLoaded = async (my_url, page) => {
 }
 
 const isAllowed = (my_url) => {
-    return allowedHosts.includes(my_url.host)
+    return hosts.includes(my_url.host)
 }
 
 http.createServer(async (req, res) => {
@@ -93,4 +91,4 @@ http.createServer(async (req, res) => {
     }
 }).listen(port)
 
-console.log('serving on :' + port)
+console.log('serving on :' + (port))
